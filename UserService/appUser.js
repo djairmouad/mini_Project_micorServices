@@ -1,3 +1,4 @@
+const startGrpcServer = require("./grpc/grpcServer");
 const express=require("express")
 const cors=require("cors")
 const db=require("./db/db")
@@ -9,7 +10,6 @@ app.use(express.json())
 app.use(express.static("public"))
 
 const user=require("./router/user");
-
 app.use("/api/user",user)
 
 
@@ -23,5 +23,4 @@ db.initDb((err,dataBase)=>{
         })
     }
 })
-
 
