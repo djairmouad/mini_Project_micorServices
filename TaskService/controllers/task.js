@@ -20,4 +20,42 @@ const CreateTask = (req, res) => {
   });
 };
 
-module.exports = {CreateTask};
+
+const FetchAllTasks=(req,res)=>{
+  const id=req.user.id;
+  const sql="SELECT * FROM task WHERE id_user=?"
+  const values=[id]
+  connection.query(sql,values,(err,data)=>{
+    if(err){
+      return res.status(500).json({success:false,message:err})
+    }
+    return res.status(200).json({success:true,data:data})
+  })
+}
+
+const DeleteTask=()=>{
+  const idTask=req.id
+  const id=req.user.id
+  const sql="DELETE FROM task WHERE id=? AND id_user=? "
+  const values=[idTask,id]
+  connection.query(sql,values,(err,data)=>{
+    if(err){
+      return res.status(500).json({success:false,message:err})
+    }
+    return res.status(200).json({success:true,message:"THE TASK HAS BEEN DELETED"})
+  })
+}
+
+const DeleteAllTasks=()=>{
+  const id=req.user.id;
+  const sql="DELETE FROM task where id_user=?"
+  const values=[id]
+  connection.query(sql,values,(err,data)=>{
+    if(err){
+      return res.status(500).json({success:false,message:err})
+    }
+    return res.status(200).json({success:true,message:"ALL TASKS HAS BEEN DELETED SUCCESSFULLY"})
+  })
+}
+
+module.exports = {CreateTask,FetchAllTasks,DeleteTask,DeleteAllTasks};

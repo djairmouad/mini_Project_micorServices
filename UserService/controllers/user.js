@@ -1,6 +1,6 @@
 const db = require("../db/db");
 const jwt=require("jsonwebtoken")
-const secretKey=process.env.privatekey
+const secretKey=process.env.privateKey
 const SignUp = (req, res) => {
   const { name, email,password } = req.body;
 
