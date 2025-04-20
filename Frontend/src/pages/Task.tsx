@@ -41,7 +41,7 @@ export default function Task() {
           </NavLink>
         </motion.li>
       </ul>
-      <div className="w-[80%] flex-col h-fit ">
+      <div className="w-[80%] flex-col min-h-screen max-h-fit ">
        <header className=" flex flex-row w-full justify-between bg-[#fcfcfc] h-[10%] pl-3">
         <ul className="flex flex-row items-center w-[25%] relative">
         <CiSearch className=" absolute top-[50%] w-[10%] -translate-y-[50%] " />

@@ -17,7 +17,8 @@ module.exports=router;
 //http://localhost:3001/api/task/CreateTask
 // {
 //     "name": "first task",
-//     "desc":"first task 123444555"
+//     "desc":"first task 123444555",
+//     "type":"Start"
 //  }
 
 //http://localhost:3001/api/task/FetchAllTasks

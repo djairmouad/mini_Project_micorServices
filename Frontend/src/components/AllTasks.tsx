@@ -1,16 +1,19 @@
 import { MdMoreVert } from "react-icons/md";
-import Tasks from "../DummyData/DummyTasks";
 import Modal from "../UI/Modal";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLoaderData } from "react-router-dom";
 export default function AllTasks() {
   const [edit, setEdit] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<{
     name: string;
     desc: string;
+    type:string,
     id: number;
   }>();
   const [open, setOpen] = useState<boolean>(false);
+
+  const {data}=useLoaderData()
   function handleMenu(id: number) {
     if (id === edit) {
       return setEdit(undefined);
@@ -18,8 +21,8 @@ export default function AllTasks() {
     setEdit(id);
   }
 
-  function handleEdit(id: number, desc: string, name: string) {
-    setShowModal({ name, desc, id });
+  function handleEdit(id: number, desc: string, name: string,type:string) {
+    setShowModal({ name, desc, type,id });
     setOpen((prev) => !prev);
     setEdit(undefined);
   }
@@ -31,9 +34,9 @@ export default function AllTasks() {
       initial={{ opacity: 0, y: 100 }}
       transition={{ duration: 0.4 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-row  justify-around py-7 h-fit px-1"
+      className="flex flex-row  justify-around pt-7 h-fit px-1"
     >
-      {Tasks.map((item, index) => {
+      {data?.map((item, index:number) => {
         return (
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -70,7 +73,8 @@ export default function AllTasks() {
                   <motion.div 
                   whileHover={{ 
                     scale: 1.05, 
-                    backgroundColor: hoverColor 
+                    backgroundColor: hoverColor ,
+                    zIndex:10
                   }}
                     transition={{duration:0.3}}
                     key={element.id}
@@ -85,7 +89,9 @@ export default function AllTasks() {
                         onClick={() => handleMenu(element.id)}
                       />
                       {edit === element.id && (
-                        <div
+                        <motion.div
+                        animate={{zIndex:10}}
+                        whileHover={{zIndex:10,scale:1.1}}
                           style={{
                             right:
                               item.type !== "Completed" ? "-120px" : "-35px",
@@ -94,7 +100,7 @@ export default function AllTasks() {
                         >
                           <button
                             onClick={() =>
-                              handleEdit(element.id, element.desc, element.name)
+                              handleEdit(element.id, element.desc, element.name,item.type)
                             }
                             style={{ fontFamily: "sans-serif" }}
                             className="font-medium cursor-pointer rounded-l-sm text-left px-1 hover:bg-[#dde8ff] border-b border-b-[#c6d2ec]"
@@ -107,7 +113,7 @@ export default function AllTasks() {
                           >
                             Delete
                           </button>
-                        </div>
+                        </motion.div>
                       )}
                     </div>
                     <p className=" text-sm text-[#a6a6a6]">{element.desc}</p>
@@ -124,6 +130,7 @@ export default function AllTasks() {
             open={open}
             name={showModal?.name}
             desc={showModal?.desc}
+            type={showModal?.type}
             onClose={onCloseModal}
           />
         )}

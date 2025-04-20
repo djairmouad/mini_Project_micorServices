@@ -17,8 +17,10 @@ const userProto = grpc.loadPackageDefinition(packageDefinition).userPackage;
 
 // ✅ Fixed: removed space after colon
 const client = new userProto.UserService(
-  "userService:50051",
+  "localhost:50051",
   grpc.credentials.createInsecure()
 );
 //"localhost"
+//"userService"
 module.exports = client;
+

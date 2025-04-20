@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Button from "../UI/Button";
+import { Form } from "react-router-dom";
 
 export default function CreateTask() {
   return (
@@ -9,7 +10,7 @@ export default function CreateTask() {
       transition={{ duration: 0.4 }}
       className="w-full max-w-2xl mx-auto p-6"
     >
-      <form className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+      <Form method="POST" className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
           Create New Task
         </h2>
@@ -19,6 +20,7 @@ export default function CreateTask() {
             Task Name
           </label>
           <input
+          name="name"
             type="text"
             placeholder="Enter task name"
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-400 focus:ring-1 focus:ring-blue-200 transition-all outline-none"
@@ -30,6 +32,7 @@ export default function CreateTask() {
             Description
           </label>
           <textarea
+          name="desc"
             placeholder="Enter task description"
             rows={4}
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-400 focus:ring-1 focus:ring-blue-200 transition-all outline-none"
@@ -44,6 +47,19 @@ export default function CreateTask() {
             className="hover:bg-blue-600 px-4 py-2"
           />
         </div>
-      </form>
+      </Form>
     </motion.div>)
+}
+
+
+export async function actionCreate({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  const fd={
+    name:data.name,
+    desc:data.desc,
+    type:"Start"
+  }
+  await CreateTask(fd);
+  
 }
