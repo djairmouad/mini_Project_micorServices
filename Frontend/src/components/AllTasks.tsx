@@ -3,6 +3,8 @@ import Modal from "../UI/Modal";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLoaderData } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import queryClient, { deleteTask, DeleteTask } from "../util/https";
 export default function AllTasks() {
   const [edit, setEdit] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<{
@@ -12,8 +14,22 @@ export default function AllTasks() {
     id: number;
   }>();
   const [open, setOpen] = useState<boolean>(false);
-
-  const {data}=useLoaderData()
+  const { data = [] } = useLoaderData() as { data: any[] }; 
+  const [tasks,setTasks]=useState(data)
+  const {mutate}=useMutation({
+    mutationKey:["Delete"],
+    mutationFn:deleteTask,
+    onSuccess: (_, variables) => {
+      const deletedId = variables.id;
+      setTasks((prev: any[]) =>
+        prev.map((group) => ({
+          ...group,
+          children: group.children.filter((task) => task.id !== deletedId),
+        }))
+      );
+      setEdit(undefined); // Close dropdown menu if open
+    },
+  })
   function handleMenu(id: number) {
     if (id === edit) {
       return setEdit(undefined);
@@ -26,6 +42,9 @@ export default function AllTasks() {
     setOpen((prev) => !prev);
     setEdit(undefined);
   }
+  function handleDelete(id:number){
+    mutate({id});
+    }
   function onCloseModal() {
     setOpen(false);
   }
@@ -36,12 +55,12 @@ export default function AllTasks() {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-row  justify-around pt-7 h-fit px-1"
     >
-      {data?.map((item, index:number) => {
+      {tasks?.map((item, index:number) => {
         return (
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-            key={index}
+            key={item.type}
             className=" w-[30%] h-fit cursor-pointer"
           >
             <div className=" flex flex-row gap-1.5 items-center px-0.5 py-2 pr-3.5">
@@ -62,7 +81,9 @@ export default function AllTasks() {
                 {item.children.length} tasks
               </span>
             </div>
+            
             <div className=" bg-[#cfd8ed80] px-4 py-4 rounded-2xl flex flex-col gap-5">
+            <AnimatePresence mode="popLayout">
               {item.children.map((element) => {
                   const hoverColor = 
                   item.type === "Start" ? "#E6F2FF" :
@@ -71,13 +92,17 @@ export default function AllTasks() {
              
                 return (
                   <motion.div 
+                  key={element.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.25 }}
+                  layout
                   whileHover={{ 
                     scale: 1.05, 
                     backgroundColor: hoverColor ,
                     zIndex:10
                   }}
-                    transition={{duration:0.3}}
-                    key={element.id}
                     className=" flex flex-col border-1 rounded-xl border-[#c6d2ec] bg-white px-3 py-2 gap-3"
                   >
                     <div className=" flex flex-row justify-between w-full items-center relative">
@@ -108,6 +133,7 @@ export default function AllTasks() {
                             Edit
                           </button>
                           <button
+                          onClick={()=>handleDelete(element.id)}
                             style={{ fontFamily: "sans-serif" }}
                             className="font-medium cursor-pointer rounded-l-sm text-left px-1 hover:bg-[#dde8ff]"
                           >
@@ -120,7 +146,9 @@ export default function AllTasks() {
                   </motion.div>
                 );
               })}
+            </AnimatePresence>
             </div>
+            
           </motion.div>
         );
       })}
@@ -131,6 +159,7 @@ export default function AllTasks() {
             name={showModal?.name}
             desc={showModal?.desc}
             type={showModal?.type}
+            id={showModal?.id}
             onClose={onCloseModal}
           />
         )}

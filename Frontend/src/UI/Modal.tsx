@@ -2,18 +2,27 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "./Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
+import { UpdateTask } from "../util/https";
+
 
 const Modal: React.FC<{
-  name: string | undefined;
-  desc: string | undefined;
-  type: string | undefined;
-  open: boolean | undefined;
+  name: string,
+  desc: string,
+  type: string,
+  open: boolean,
+  id: number ,
   onClose: () => void;
-}> = ({ name, desc, type, open, onClose }) => {
+}> = ({ name, desc, type, open,id, onClose }) => {
   const dialog = useRef<HTMLDialogElement>(null);
   const [taskName, setTaskName] = useState(name || "");
   const [taskDesc, setTaskDesc] = useState(desc || "");
   const [taskType, setTaskType] = useState(type || "Start");
+ const {mutate}=useMutation({
+  mutationKey:["update",id],
+  mutationFn:UpdateTask
+ })
+
 
   useEffect(() => {
     if (open) {
@@ -26,17 +35,19 @@ const Modal: React.FC<{
       dialog?.current?.close();
     }
   }, [open, name, desc, type]);
+ 
 
   const handleSave = () => {
-    onClose();
+    mutate({id,name,desc,type})
   };
+  
 
   return createPortal(
     <AnimatePresence>
       <motion.dialog
         ref={dialog}
         initial={{ opacity: 0, y: 20, x: -210 }}
-        animate={{ opacity: 1, y: -200, x: -210 }}
+        animate={{ opacity: 1, y: -250, x: -210 }}
         exit={{ opacity: 0, y: -20, x: -210 }}
         transition={{ duration: 0.3 }}
         style={{
@@ -254,14 +265,15 @@ const Modal: React.FC<{
               hoverColor="#e5e7eb" // Added hoverColor
             />
             <Button
-              content="Save"
-              width="80px"
-              buttonColor="#3b82f6"
-              textColor="white"
-              onClick={() => {}} // Added empty onClick since it's required
-              borderColor="#3b82f6" // Added borderColor
-              hoverColor="#2563eb" // Added hoverColor
-            />
+  content="Save"
+  width="80px"
+  buttonColor="#3b82f6"
+  textColor="white"
+  onClick={handleSave} // Call handleSave function
+  borderColor="#3b82f6" // Added borderColor
+  hoverColor="#2563eb" // Added hoverColor
+/>
+
           </div>
         </form>
       </motion.dialog>

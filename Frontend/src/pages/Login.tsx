@@ -13,7 +13,8 @@ const Login: React.FC = () => {
     onSuccess:(data)=>{
      const token= data.token
      localStorage.setItem("token",token);
-     navigate("/task/AllTasks");
+     console.log(token)
+     return navigate("/task/AllTasks");
     }
   })
   function handleSignUp(){

@@ -47,20 +47,50 @@ const FetchAllTasks=(req,res)=>{
   })
 }
 
-const DeleteTask=()=>{
-  const idTask=req.id
-  const id=req.user.id
-  const sql="DELETE FROM task WHERE id=? AND id_user=? "
-  const values=[idTask,id]
-  connection.query(sql,values,(err,data)=>{
-    if(err){
-      return res.status(500).json({success:false,message:err})
-    }
-    return res.status(200).json({success:true,message:"THE TASK HAS BEEN DELETED"})
-  })
-}
+const DeleteTask = (req, res) => {
+  const idTask = req.params.id;
+  const id = req.user.id; // Assuming you have some auth middleware setting this
 
-const DeleteAllTasks=()=>{
+  const sql = "DELETE FROM task WHERE id = ? AND id_user = ?";
+  const values = [idTask, id];
+
+  connection.query(sql, values, (err, data) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: err });
+    }
+
+    if (data.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "Task not found or unauthorized" });
+    }
+
+    return res.status(200).json({ success: true, message: "THE TASK HAS BEEN DELETED" });
+  });
+};
+
+const UpdateTask = (req, res) => {
+  const idTask = req.params.id;
+  const id = req.user.id; 
+  const { name, desc, type } = req.body;
+
+  // Corrected SQL query: removed extra comma and fixed success message
+  const sql = "UPDATE `task` SET nameTask=?, description=?, type=? WHERE id_user=? AND id=?";
+  const values = [name, desc, type, id, idTask];
+
+  connection.query(sql, values, (err, data) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: err });
+    }
+
+    if (data.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "Task not found or unauthorized" });
+    }
+
+    return res.status(200).json({ success: true, message: "Task has been updated successfully" });
+  });
+};
+
+
+const DeleteAllTasks=(req,res)=>{
   const id=req.user.id;
   const sql="DELETE FROM task where id_user=?"
   const values=[id]
@@ -72,4 +102,4 @@ const DeleteAllTasks=()=>{
   })
 }
 
-module.exports = {CreateTask,FetchAllTasks,DeleteTask,DeleteAllTasks};
+module.exports = {CreateTask,FetchAllTasks,DeleteTask,DeleteAllTasks,UpdateTask};
