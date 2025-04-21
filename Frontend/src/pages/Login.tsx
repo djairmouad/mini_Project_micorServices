@@ -12,9 +12,12 @@ const Login: React.FC = () => {
     mutationKey:["login"],
     onSuccess:(data)=>{
      const token= data.token
-     localStorage.setItem("token",token);
-     console.log(token)
-     return navigate("/task/AllTasks");
+     if(data.success){
+      localStorage.setItem("token",token);
+      return navigate("/task/AllTasks");
+     }else{
+      navigate("/");
+     }
     }
   })
   function handleSignUp(){
@@ -65,6 +68,7 @@ const Login: React.FC = () => {
         />
         <div className="w-[90%] flex flex-row justify-between items-start h-[20%]">
   <Button
+  type="submit"
   borderColor=""
     content="Sign In"
     buttonColor="#0284c7"  // Blue-600
@@ -74,14 +78,15 @@ const Login: React.FC = () => {
     hoverColor="#0369a1"  // Blue-700
   />
   <Button
-    content="Sign Up !!"
-    buttonColor="transparent"
-    width="35%"
-    onClick={handleSignUp}
-    textColor="#0891b2"  // Cyan-600
-    borderColor="#0891b2"
-    hoverColor="transparent"  // Cyan-50
-  />
+  content="Sign Up !!"
+  buttonColor="transparent"
+  width="35%"
+  onClick={handleSignUp}
+  textColor="#0891b2"
+  borderColor="#0891b2"
+  hoverColor="transparent"
+  type="button"  // Add this
+/>
 </div>
       </motion.form>
     </div>

@@ -72,7 +72,6 @@ const UpdateTask = (req, res) => {
   const id = req.user.id; 
   const { name, desc, type } = req.body;
 
-  // Corrected SQL query: removed extra comma and fixed success message
   const sql = "UPDATE `task` SET nameTask=?, description=?, type=? WHERE id_user=? AND id=?";
   const values = [name, desc, type, id, idTask];
 

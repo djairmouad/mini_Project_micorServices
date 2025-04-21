@@ -134,7 +134,7 @@ export async function CreateTask({ name, desc, type, token }: { name: string, de
       });
   
       if (!response.ok) {
-        let errorMessage = "Deleting task failed";
+        let errorMessage = "Update Task is failed";
   
         try {
           const errorData = await response.json();

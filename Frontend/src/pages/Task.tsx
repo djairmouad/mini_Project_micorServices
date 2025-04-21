@@ -2,10 +2,11 @@ import { BiTask } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import image from "../assets/undraw_checklist_bwxa.svg"
-import profile from "../assets/Screenshot 2025-04-12 231107.png"
+import profile from "../assets/photo_2025-04-20_16-44-41.jpg"
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
 import {motion} from "framer-motion"
+import { FiLogOut } from "react-icons/fi";
 export default function Task() {
   return (
     <div className="absolute w-full h-fit flex bg-[#f4f4f4]">
@@ -38,6 +39,20 @@ export default function Task() {
           >
             <FaPlus />
             Create Task
+          </NavLink>
+        </motion.li>
+        <motion.li whileHover={{scale:1.1}} className="w-full flex justify-center">
+          <NavLink
+            to="/"
+            onClick={()=>{localStorage.removeItem("token")}}
+            className={({ isActive }) =>
+              `flex items-center gap-2 w-[80%] p-2 rounded ${
+               isActive ? "bg-[#efefef] text-black" : "text-[#afb4b8]"
+              }`
+            }
+          >
+            <FiLogOut />
+            LogOut
           </NavLink>
         </motion.li>
       </ul>

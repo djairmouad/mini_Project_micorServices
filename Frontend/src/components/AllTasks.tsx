@@ -2,19 +2,23 @@ import { MdMoreVert } from "react-icons/md";
 import Modal from "../UI/Modal";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import queryClient, { deleteTask, DeleteTask } from "../util/https";
+import { deleteTask } from "../util/https";
+import TasksType from "../types/type";
+import Spinner from "../UI/Spinner";
 export default function AllTasks() {
   const [edit, setEdit] = useState<number | undefined>(undefined);
   const [showModal, setShowModal] = useState<{
-    name: string;
-    desc: string;
-    type:string,
+    name: string | undefined;
+    desc: string | undefined;
+    type: string | undefined;
     id: number;
   }>();
+  
   const [open, setOpen] = useState<boolean>(false);
-  const { data = [] } = useLoaderData() as { data: any[] }; 
+  const { data} = useLoaderData() as { data: any[] }; 
+  const navigation = useNavigation();
   const [tasks,setTasks]=useState(data)
   const {mutate}=useMutation({
     mutationKey:["Delete"],
@@ -48,6 +52,16 @@ export default function AllTasks() {
   function onCloseModal() {
     setOpen(false);
   }
+  function handleChangeData(newData:TasksType){
+    setTasks(newData)
+  }
+  if (navigation.state === "loading") {
+    return (
+      <div className="w-full flex justify-center py-10">
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -60,7 +74,7 @@ export default function AllTasks() {
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-            key={item.type}
+            key={`${item.type}-${index}`}
             className=" w-[30%] h-fit cursor-pointer"
           >
             <div className=" flex flex-row gap-1.5 items-center px-0.5 py-2 pr-3.5">
@@ -155,13 +169,16 @@ export default function AllTasks() {
       <AnimatePresence>
         {open && (
           <Modal
-            open={open}
-            name={showModal?.name}
-            desc={showModal?.desc}
-            type={showModal?.type}
-            id={showModal?.id}
-            onClose={onCloseModal}
-          />
+          open={open}
+          name={showModal?.name}
+          desc={showModal?.desc}
+          type={showModal?.type}
+          id={showModal?.id}
+          onClose={onCloseModal}
+          setData={handleChangeData}
+          data={tasks}
+        />
+        
         )}
       </AnimatePresence>
     </motion.div>
