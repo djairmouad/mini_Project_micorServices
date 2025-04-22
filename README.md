@@ -107,7 +107,7 @@ A full-stack microservices-based ToDo application built with:
 
 ## 📸 Screenshot
 
-![Preview](https://user-images.githubusercontent.com/.../preview.png) <!-- Replace with your image link if available -->
+![Preview](https://i.ibb.co/q3TpNBKw/TODO-App.png) <!-- Replace with your image link if available -->
 
 ---
 
