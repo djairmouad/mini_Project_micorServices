@@ -1,11 +1,12 @@
+
 # 🧩 Microservices ToDo App
 
 A full-stack microservices-based ToDo application built with:
-- 🧑‍💻 React.js (Frontend)
-- 🛠️ Node.js + Express (Backend)
-- 🧬 MongoDB (UserService)
-- 💾 MySQL (TaskService)
-- 🔐 gRPC communication for secure token verification between services
+- 🧑‍💻 **React.js** (Frontend)
+- 🛠️ **Node.js** + **Express** (Backend)
+- 🧬 **MongoDB** (UserService)
+- 💾 **MySQL** (TaskService)
+- 🔐 **gRPC** communication for secure token verification between services
 
 ---
 
@@ -62,7 +63,7 @@ A full-stack microservices-based ToDo application built with:
    - Use [MongoDB Compass](https://www.mongodb.com/products/compass) to connect.
    - Database name: `UserService`
    - Collection: `users`
-   - Sample data is available in the folder `DataBase-MongoDb-UserService-...`
+   - Sample data is available in the folder `DataBase-MongoDb`
 
 ---
 
@@ -82,7 +83,7 @@ A full-stack microservices-based ToDo application built with:
 3. **MySQL Connection**:
    - Database name: `Todo_tasks`
    - Table: `task`
-   - SQL script for the table is available in `DataBase-MySql-(TaskService)-...`
+   - SQL script for the table is available in `DataBase-MySql`
 
 ---
 
@@ -97,11 +98,11 @@ A full-stack microservices-based ToDo application built with:
 
 ## 🛡 Tech Stack Highlights
 
-- ✅ JWT Auth
-- ☁️ REST + gRPC
-- 🧪 Modular Microservices
-- 💾 MongoDB & MySQL integration
-- ⚛️ React with fetch API and `localStorage` token management
+- ✅ **JWT Auth**
+- ☁️ **REST** + **gRPC**
+- 🧪 **Modular Microservices**
+- 💾 **MongoDB** & **MySQL** integration
+- ⚛️ **React** with fetch API and `localStorage` token management
 
 ---
 
